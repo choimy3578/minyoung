@@ -13,24 +13,24 @@ w와 b 변수 두개를 준비한다.
 learning_rate = 0.01             learning_rate를 산수로 지정한다.
 
 # W, b update
-for i in range(100+1):           i는 0부터 101까지 변해간다.(101번 반복한다.)
-    # Gradient descent           경사 하강법 : cost가 최소화되는 w와 b를 찾는다.
+for i in range(100+1):                      i는 0부터 101까지 변해간다.(101번 반복한다.)
+    # Gradient descent                      경사 하강법 : cost가 최소화되는 w와 b를 찾는다.
     with tf.GradientTape() as tape:     
 tensorflow에서 gradient descent를 구현한다. 변수들의 기록을 tape에 저장한다.
-        hypothesis = W * x_data + b  변수 w와 b를 tape에 저장한다.   
+        hypothesis = W * x_data + b             변수 w와 b를 tape에 저장한다.   
         cost = tf.reduce_mean(tf.square(hypothesis - y_data))
     W_grad, b_grad = tape.gradient(cost, [W, b]) 
 cost function에서 w에 대한 기울기는 W_grade, b에 대한 기울기는 b_grade에 할당된다.
-    W.assign_sub(learning_rate * W_grad      learning rate을 곱해서 할당한다.                    
-    b.assign_sub(learning_rate * b_grad)     assign_sub : 뺀 값을 다시 그 값에 할당해준다.
+    W.assign_sub(learning_rate * W_grad               learning rate을 곱해서 할당한다.                    
+    b.assign_sub(learning_rate * b_grad)              assign_sub : 뺀 값을 다시 그 값에 할당해준다.
  
-    if i % 10 == 0:                 10의 배수가 될 때마다 print해준다.
+    if i % 10 == 0:                                   10의 배수가 될 때마다 print해준다.
       print("{:5}|{:10.4f}|{:10.4f}|{:10.6f}".format(i, W.numpy(), b.numpy(), cost))
 
 print()
 
 # predict
-print(W * 5 + b)       우리 모델을 통해 직접 예측해본다.
+print(W * 5 + b)                  우리 모델을 통해 직접 예측해본다.
 실제 결과값이 5와 가깝다.
 print(W * 2.5 + b)
 실제 결과값이 2.5와 가깝다.
