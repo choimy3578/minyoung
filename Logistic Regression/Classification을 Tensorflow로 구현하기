@@ -1,0 +1,38 @@
+import tensorflow.contrib.eager as tfe tensorflow를 실행하기 위해 기본적인 library를 import한다.
+tf.enable_eager_execution()  eager 모드를 실행한다.
+dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)).batch(len(x_train))
+tf 데이터를 통해서 x값과 y값을 x 데이터의 길이만큼 batch로 학습한다.
+W = tf.Variable(tf.zeros([2,1]), name='weight')  
+b = tf.Variable(tf.zeros([1]), name='bias')
+
+def logistic_regression(features):   
+hypothesis = tf.div(1., 1. + tf.exp(tf.matmul(features, W) + b))
+logistic regression에 대한 hypothesis 함수(시그모이드 함수)이다.
+return hypothesis
+def loss_fn(hypothesis, labels):        
+cost = -tf.reduce_mean(labels * tf.log(loss_fn(hypothesis) + (1 - labels) * tf.log(1 - hypothesis))
+return cost
+
+# 학습을 위한 함수
+hypothesis로 나온 값을 실제 우리가 label에 넣으면 hypothesis와 label을 통해 cost 값을 구할 수 있다.
+def grad(hypothesis, features, labels):
+with tf.GradientTape() as tape:
+loss_value = loss_fn(hypothesis,labels)  
+hypothesis와 labels 값을 loss 값에 넣어서 실제 값과 가설을 통해 나온 값을 비교한 loss 값을 구할 수 있다.
+return tape.gradient(loss_value, [W,b])       gradient을 통해서 실제 우리 모델 값을 바꿀 수 있다.      
+optimizer = tf.train.GradientDescentOptimizer(learning_rate=0.01) 
+
+# 실제 학습을 위한 함수 호출
+for step in range(EPOCHS):        epoch만큼 반복한다.
+for features, labels in tfe.Iterator(dataset):          dataset을 통해서 iterator을 돌려서 실제 x 값과 y값을 넣는다.   
+grads = grad(logistic_regression(features), features, labels)      x와 y를 logistic regression에 입력하여 gradient 값이 나온다.  
+optimizer.apply_gradients(grads_and_vars=zip(grads,[W,b]))      이 과정을 통해 w와 b 값이 업데이트 된다.
+if step % 100 == 0:      100번에 한 번씩 우리가 원하는 iterator 값과 loss 값을 출력할 수 있다.
+print("Iter: {}, Loss: {:.4f}".format(step, loss_fn(logistic_regression(features) ,labels)))
+
+# 테스트
+def accuracy_fn(hypothesis, labels):  hypothesis와 label값 비교
+predicted = tf.cast(hypothesis > 0.5, dtype=tf.float32)            
+accuracy = tf.reduce_mean(tf.cast(tf.equal(predicted, labels), dtype=tf.int32))
+return accuracy
+test_acc = accuracy_fn(logistic_regression(x_test),y_test)
